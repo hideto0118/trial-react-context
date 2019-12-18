@@ -1,47 +1,37 @@
-import React from 'react';
+import React, { createContext, useState, useContext } from "react";
 
 // Make context
-const CounterContext = React.createContext();
+const CounterContext = createContext();
 
 // Parent
-export default class Parent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      count: 0 //define state
-    }
-  }
+const Parent = () => {
+  const [num, setNum] = useState(0);
 
-  increment = () => {
-    this.setState({
-      count: this.state.count + 1
-    });
-  }
+  return (
+    <CounterContext.Provider
+      value={{
+        num,
+        increment: () => setNum(num + 1)
+      }}
+    >
+      <Child />
+    </CounterContext.Provider>
+  );
+};
+export default Parent;
 
-  render() {
-    return (
-      <CounterContext.Provider
-        value={{ count: this.state.count, increment: this.increment }} // pass functions too
-        >
-          <Child />
-      </CounterContext.Provider>
-    );
-  }
-}
+// Child
+const Child = () => <Grandchild />;
 
-// Child doing nothing
-const Child = () => <Grandchild />
+// Grandchild
+const Grandchild = () => {
+  const counter = useContext(CounterContext); // Use hooks
+  return (
+    // You can write the same way as always
+    <>
+      <p>{counter.num}</p>
+      <button onClick={counter.increment}>Increment</button>
+    </>
+  );
 
-// GrandChild as a class
-class Grandchild extends React.Component {
-  static contextType = CounterContext; // using contextType
-  render() {
-    const { count, increment } = { ...this.context }; //receiving context
-    return (
-      <>
-        <p>count: {count}</p>
-        <button onClick={increment}>increment</button>
-      </>
-    );
-  }
 }
