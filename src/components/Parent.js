@@ -10,9 +10,6 @@ export default class Parent extends React.Component {
   }
 }
 
-// Simplly only Child
-// const Child = ({ count }) => <div>count: {count}</div>;
-
 // Child passing props
 const Child = ({ count, greeting }) => <Grandson count={count} greeting={greeting} />;
 
@@ -26,3 +23,27 @@ const GrandGrandchild = ({ count, greeting }) => (
     <div>greeting: {greeting}</div>
   </>
 );
+
+
+////// Use render props //////
+// export default class Parent extends React.Component {
+//   render() {
+//     const count = 1;
+//     const greeting = 'hello';
+
+//     const greatGrandChild = (
+//       <>
+//         <div>count: {count}</div>
+//         <div>greeting: {greeting}</div>
+//       </>
+//     );
+
+//     return <Child ggc={greatGrandChild} />;
+//   }
+// }
+
+// // child
+// const Child = ({ ggc }) => <Grandchild ggc={ggc} />
+
+// // grandchild
+// const Grandchild = ({ ggc }) => ggc;
