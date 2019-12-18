@@ -1,49 +1,29 @@
-import React from "react";
+import React, { createContext } from 'react';
+
+const { Provider, Consumer } = createContext();
 
 // Parent
-export default class Parent extends React.Component {
-  render() {
-    const count = 1;
-    const greeting = 'hello';
-
-    return <Child count={count} greeting={greeting} />
-  }
-}
-
-// Child passing props
-const Child = ({ count, greeting }) => <Grandson count={count} greeting={greeting} />;
-
-// Grandson passing props
-const Grandson = ({ count, greeting }) => <GrandGrandchild count={count} greeting={greeting} />;
-
-// GrandGrandchild who wants to use props
-const GrandGrandchild = ({ count, greeting }) => (
-  <>
-    <div>count: {count}</div>
-    <div>greeting: {greeting}</div>
-  </>
+const Parent = () => (
+  <Provider value={{ count: 1, greeting: 'hello' }}>
+    <Child />
+  </Provider>
 );
+export default Parent;
 
+// Child props not passed
+const Child = () => <Grandchild />;
 
-////// Use render props //////
-// export default class Parent extends React.Component {
-//   render() {
-//     const count = 1;
-//     const greeting = 'hello';
+// Grandchild props not passed
+const Grandchild = () => <GreatGrandchild />
 
-//     const greatGrandChild = (
-//       <>
-//         <div>count: {count}</div>
-//         <div>greeting: {greeting}</div>
-//       </>
-//     );
-
-//     return <Child ggc={greatGrandChild} />;
-//   }
-// }
-
-// // child
-// const Child = ({ ggc }) => <Grandchild ggc={ggc} />
-
-// // grandchild
-// const Grandchild = ({ ggc }) => ggc;
+// GreatGreatchild
+const GreatGrandchild = () => (
+  <Consumer>
+    {({ count, greeting }) => (
+      <>
+        <div>count: {count}</div>
+        <div>greeting: {greeting}</div>
+      </>
+    )}
+  </Consumer>
+);
